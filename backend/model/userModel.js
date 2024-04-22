@@ -48,11 +48,11 @@ const userSchema = new mongoose.Schema({
   avatar: {
     publicId: {
       type: String,
-      required: true,
+      //required: true,
     },
     url: {
       type: String,
-      required: true,
+      //required: true,
     },
   },
   createdAt: {
@@ -63,12 +63,13 @@ const userSchema = new mongoose.Schema({
   resetPasswordTime: Date,
 });
 
-//hash the password using bcryptjs
-userSchema.pre("save", async (next) => {
+// Hash the password using bcryptjs
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
-    next();
+    return next();
   }
   this.password = await bcrypt.hash(this.password, 10);
+  next();
 });
 
 //jwt token generation
